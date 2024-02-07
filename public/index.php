@@ -7,30 +7,13 @@
  */
 
  require_once './config.inc.php';
+ require_once './includes/functions.inc.php';
 
-// Set response headers to JSON
+// Set content type to JSON
 header('Content-Type: application/json; charset=utf-8');
 
-/**
- * Function used to return JSON object as API response
- *
- * @param bool $success Used to identify wether action was successfull or not
- * @param string $message Message to send (used mainly for errors)
- * @param array $data Data to return in JSON response
- *
- * @return JSON [return description]
- */
-function _response(bool $success, string $message, array $data = [])
-{
-    $response = array(
-        'success' => $success,
-        'message' => $message,
-        'data' => $data
-    );
-
-    die(json_encode($response));
-}
-
+// Allow CORS from any source (allows usage of API in front end from any domain)
+header("Access-Control-Allow-Origin: *");
 
 $requiredParams = array(
     'key',
@@ -61,6 +44,6 @@ $message = "Credentials are valid until: " . date('Y-m-d h:i:s', $credentialEndT
 $data = array(
     'username' => $username,
     'password' => $password,
-    'credentialEndTime' => $credentialEndTime
+    'ttl' => $credentialEndTime
 );
 _response(true, $message, $data);
